@@ -71,3 +71,49 @@ const numerosEnObjetos = listaNumeros.map(
     }
 );
 console.log(numerosEnObjetos);
+
+// función filter
+
+const numerosX = [90, 70, 30, 10, 50];
+const numerosFiltrados = numerosX.filter(
+numX => numX > 50
+);
+
+console.log(numerosFiltrados);
+
+
+const personas = [
+    {
+        nombre: "Carlos",
+        edad: 19
+    },
+    {
+        nombre: "David",
+        edad: 19
+    },
+    {
+        nombre: "Gabriel",
+        edad: 16
+    },
+    {
+        nombre: "Yelin",
+        edad:15
+    },
+];
+
+const personasMayores = personas.filter(
+    personaX => personaX.edad > 17
+)
+console.log(personasMayores);
+
+// Función reduce
+
+const numerosY =[3,6,9,12,16];
+
+const sumaNumero = numerosY.reduce( 
+    (variablePersistente, elemento) => 
+        variablePersistente + elemento 
+    ,
+    0
+);
+console.log(sumaNumero);
