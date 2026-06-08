@@ -16,10 +16,15 @@ const estudianteX ={
 //Referencias al DOM
 
     const seccionEstudiante = document.getElementById("lista-estudiantes");
+    const seccionPromedio = document.getElementById("resultado-promedio");
     const btnTodos = document.getElementById("btn-todos");
     const btnAprobados = document.getElementById("btn-aprobados");
     const btnReprobados = document.getElementById("btn-reprobados");
     const btnPromedio = document.getElementById("btn-promedio");
+
+    const btnAgregar = document.getElementById("btn-agregar");
+    const inputNombre = document.getElementById("input-nombre");
+    const inputNota = document.getElementById("input-nota");
     
 //Funciones
 const crearTarjeta = (unEstudiante) => {
@@ -46,17 +51,25 @@ const renderizarLista = (estudianteApintar) => {
     seccionEstudiante.innerHTML=listaTarjetas.join("")
 }
 
+const toFixedTrunc = (num, decimales) => {
+    // 10 elevado al número de decimalers que deseas conservar 
+    const factor = Math.pow(10, decimales);
+
+    //multiplica, corta los decimales restantes y velve a dividir
+    const truncado = Math.trunc(num * factor) / factor;
+
+    //retorna el string con el formato fijo final sin redondear
+    return truncado.toFixed(decimales);
+}
+
 //Eventos
 
-btnTodos.addEventListener('click',
-    () => {
+btnTodos.addEventListener('click',() => {
         renderizarLista(estudiantes);
     }
 );
 
-btnAprobados.addEventListener(
-    'click',
-    () => {
+btnAprobados.addEventListener('click',() => {
         const aprobados = estudiantes.filter(
             (estudianteX)=>{
                 return estudianteX.nota > 60;
@@ -66,9 +79,7 @@ btnAprobados.addEventListener(
     }
 );
 
-btnReprobados.addEventListener(
-    'click',
-    () => {
+btnReprobados.addEventListener('click',() => {
         const reprobados = estudiantes.filter(
             (estudianteX)=>{
                 return estudianteX.nota < 61;
@@ -78,19 +89,39 @@ btnReprobados.addEventListener(
     }
 );
 
-btnPromedio.addEventListener(
-    'click',
-    () => {
-        const promedio = estudiante.reduce(
-            (estudianteX,otrovalor) => {
-                const valor = (estudianteX + otrovalor);
-                return valor;
-                
-            }
+btnPromedio.addEventListener('click', () => {
+        const sumaNotas = estudiantes.reduce(
+            (estudianteX,estudiante) => { //(Acumulador, variable que lo utiliza)
+                return estudianteX + estudiante.nota;
+            },0
         );
-        //Crear Tarjeta de promedio donde
+        const promedio = sumaNotas / estudiantes.length;
+        console.log(toFixedTrunc(promedio,2));
+        seccionPromedio.innerHTML = "Promedio: " + toFixedTrunc(promedio,2);
+        seccionPromedio.style.display = "block"; //Muestra de nuevo
     }
-)
+);  
+
+btnAgregar.addEventListener('click', ()=>{
+    const nombre = inputNombre.value.trim(); //" ANA " = "ANA"
+    const nota = parseInt(inputNota.value.trim());
+
+    if (nombre == "" || isNaN(nota) || nota < 0 || nota >100 ){
+        alert("Por favor, ingresa unn nombre váldo y una nota entre 0 y 100");
+        return;
+    }
+
+    const nuevoEstudiante = {
+        id: estudiantes.length + 1,
+        nombre, // = nombre: nombre
+        nota // = nota: nota
+    };
+    estudiantes.push(nuevoEstudiante);
+    renderizarLista(estudiantes);
+
+    inputNombre.value = "";
+    inputNota.value = "";
+});
 
 //Llamadas a funciones
 renderizarLista(estudiantes);
